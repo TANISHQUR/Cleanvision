@@ -1,0 +1,1 @@
+"""CleanVision littering detector."""

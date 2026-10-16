@@ -1,0 +1,85 @@
+# Python environments
+.venv/
+.venv-*/
+venv/
+env/
+
+# Python cache and tests
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Secrets and environment configuration
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!.env.example
+
+# Local databases and generated outputs
+storage/
+runs/
+weights/
+logs/
+*.log
+last_test_job.json
+storage/test_report.json
+
+# Datasets and annotations
+dataset/
+datasets/
+raw/
+
+# Model weights and training artifacts
+*.pt
+*.pth
+*.onnx
+*.engine
+*.safetensors
+*.torchscript
+
+# Video, image, and generated evidence files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# Local archives and backups
+*.zip
+*.bak
+*.backup
+*.before_finetune
+config.yaml.backup
+config.yaml.before_finetune
+
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Demo media and model checkpoints
+demo/*.mp4
+demo/*.mov
+demo/*.avi
+demo/*.mkv
+demo/*.webm
+yolo*.pt
+
+# Demo videos and downloaded YOLO weights
+demo/*.mp4
+demo/*.mov
+demo/*.avi
+demo/*.mkv
+demo/*.webm
+yolo*.pt
