@@ -1,0 +1,46 @@
+model:
+  weights: runs/detect/cleanvision_classaware_v1/weights/best.pt
+  imgsz: 1280
+  conf: 0.1
+  iou: 0.5
+  device: cpu
+  half: false
+  tracker: bytetrack.yaml
+  vid_stride: 1
+  person_class: person
+  litter_classes:
+  - bottle
+  - can
+  - wrapper
+  - paper
+  person_weights: yolo11n.pt
+events:
+  near_margin: 0.25
+  assoc_window_s: 1.0
+  min_contact_s: 0.3
+  stationary_window_s: 1.0
+  stationary_tol: 0.02
+  linger_s: 2.0
+  separation: 0.8
+  absent_s: 0.7
+  min_object_conf: 0.2
+  track_timeout_s: 3.0
+  dedupe_iou: 0.3
+  dedupe_s: 60
+  verify_new_object: true
+  verify_diff: 8
+evidence:
+  output_dir: storage/local_runs
+  pre_s: 8
+  post_s: 2
+  fps: 15
+  max_width: 960
+  jpeg_quality: 85
+camera:
+  id: CAM-01
+  location: Demo corridor, Block C
+  bin_zones: []
+  ignore_zones: []
+api:
+  url: http://127.0.0.1:8000
+  token: change-me-detector-token
