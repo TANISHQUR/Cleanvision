@@ -1,4 +1,5 @@
 // Thin wrapper around fetch that adds the login token and turns errors into readable messages.
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 const TOKEN_KEY = "cleanvision_token";
 const USER_KEY = "cleanvision_user";
 
@@ -37,7 +38,7 @@ async function request(path, { method = "GET", body, form } = {}) {
   }
   let res;
   try {
-    res = await fetch(path, { method, headers, body: payload });
+    res = await fetch(`${API_BASE}${path}`, { method, headers, body: payload });
   } catch {
     throw new ApiError("Can't reach the CleanVision server. Check that the backend is running on port 8000.", 0);
   }
@@ -70,7 +71,7 @@ export const api = {
 
 export function mediaUrl(path) {
   if (!path) return null;
-  return `${path}?token=${encodeURIComponent(session.token || "")}`;
+  return `${API_BASE}${path}?token=${encodeURIComponent(session.token || "")}`;
 }
 
 function clean(obj) {
