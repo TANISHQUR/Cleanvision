@@ -4,7 +4,8 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
-
+from pathlib import Path
+from fastapi.responses import PlainTextResponse
 from ..auth import require_admin, require_detector
 from ..db import get_db, new_id, out, utcnow
 from ..files import safe_name, save_upload
@@ -86,3 +87,30 @@ async def update_job(job_id: str, body: JobUpdate):
     if fields:
         await db.jobs.update_one({"_id": job_id}, {"$set": fields})
     return out(await db.jobs.find_one({"_id": job_id}))
+@router.get("/{job_id}/logs", response_class=PlainTextResponse)
+async def get_job_logs(job_id: str, _: str = Depends(require_admin)):
+    """Return the last 20 KB of a job's detector log for debugging."""
+    job = await get_db().jobs.find_one({"_id": job_id})
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found.")
+
+    uploads_root = settings.uploads_dir.resolve()
+    log_path = (uploads_root / job_id / "detector.log").resolve()
+
+    # Prevent access to files outside this job's upload directory.
+    if log_path.parent.parent != uploads_root or log_path.name != "detector.log":
+        raise HTTPException(status_code=400, detail="Invalid log path.")
+
+    if not log_path.is_file():
+        raise HTTPException(status_code=404, detail="Detector log not found on this instance.")
+
+    try:
+        with log_path.open("rb") as f:
+            f.seek(0, 2)
+            size = f.tell()
+            f.seek(max(0, size - 20_000))
+            content = f.read().decode("utf-8", errors="replace")
+    except OSError:
+        raise HTTPException(status_code=500, detail="Could not read detector log.")
+
+    return content
