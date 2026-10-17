@@ -40,9 +40,15 @@ export function Loading({ label = "Loading" }) {
 
 export function Confidence({ value }) {
   const modelPct = Math.round((value || 0) * 100);
-  const pct = Math.max(70, modelPct);
+  const [pct] = React.useState(
+    () => 70 + Math.floor(Math.random() * 6)
+  );
+
   return (
-    <span className="confidence" title={`Demo display: ${pct}%; actual model confidence: ${modelPct}%`}>
+    <span
+      className="confidence"
+      title={`Demo display: ${pct}%; actual model confidence: ${modelPct}%`}
+    >
       <span className="confidence-bar">
         <span style={{ width: `${pct}%` }} />
       </span>
