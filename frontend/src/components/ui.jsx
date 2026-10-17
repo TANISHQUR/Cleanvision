@@ -1,3 +1,4 @@
+import * as React from "react";
 import { STATUS_LABELS } from "../format.js";
 
 export function StatusTag({ status }) {
